@@ -1,23 +1,25 @@
 package br.com.vaniala.orgs.ui.recyclerview.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.databinding.ProdutoItemBinding
 import br.com.vaniala.orgs.model.Produto
 
 class ListaProdutosAdapter(
     private val context: Context,
-    private val produtos: List<Produto>
+    produtos: List<Produto>
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
+
+    private val produtos = produtos.toMutableList()
 
     class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root){
 
-        private val nome = binding.nome
-        private val descricao = binding.descricao
-        private val valor = binding.valor
+        private val nome = binding.produtoItemNome
+        private val descricao = binding.produtoItemDescricao
+        private val valor = binding.produtoItemValor
 
         fun vincula(produto: Produto) {
             nome.text = produto.nome
@@ -43,5 +45,12 @@ class ListaProdutosAdapter(
     }
 
     override fun getItemCount() = produtos.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun atualiza(produtos: List<Produto>) {
+        this.produtos.clear()
+        this.produtos.addAll(produtos)
+        notifyDataSetChanged()
+    }
 
 }
