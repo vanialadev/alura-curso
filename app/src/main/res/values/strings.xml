@@ -2,4 +2,6 @@
     <string name="app_name">Orgs</string>
     <string name="botao_de_adicionar_produto">botao de adicionar produto</string>
     <string name="novo_produto">Novo Produto</string>
+    <string name="carregar">Carregar</string>
+    <string name="url_da_imagem">URL da imagem</string>
 </resources>
