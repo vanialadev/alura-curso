@@ -7,7 +7,8 @@ import java.math.BigDecimal
  * on 19/10/22.
  *
  */
-data class  Produto(
+data class Produto(
+    val imagem: String? = null,
     val nome: String,
     val descricao: String,
     val valor: BigDecimal

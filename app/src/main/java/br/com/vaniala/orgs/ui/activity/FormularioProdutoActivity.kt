@@ -1,12 +1,18 @@
 package br.com.vaniala.orgs.ui.activity
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.dao.ProdutoDao
 import br.com.vaniala.orgs.databinding.ActivityFormularioProdutoBinding
+import br.com.vaniala.orgs.databinding.FormularioImagemBinding
 import br.com.vaniala.orgs.model.Produto
+import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.load
 import java.math.BigDecimal
 
 /**
@@ -19,18 +25,38 @@ class FormularioProdutoActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityFormularioProdutoBinding.inflate(layoutInflater)
     }
+    private var url: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraBotaoSalvar()
-        binding.activityFormularioProdutoImagem.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setView(R.layout.activity_formulario_imagem)
-                .setPositiveButton("Confirmar", {_,_ ->
 
-                })
-                .setNegativeButton("Cancelar",{_,_ -> })
+        val imageLoader = ImageLoader.Builder(this)
+            .components {
+                if (Build.VERSION.SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }
+            .build()
+
+        binding.activityFormularioProdutoImagem.setOnClickListener {
+            val bindingFormularioImagem = FormularioImagemBinding.inflate(layoutInflater)
+
+            bindingFormularioImagem.formularioImagemBotaoCarregar.setOnClickListener {
+                val url = bindingFormularioImagem.formularioImagemUrl.text.toString()
+                bindingFormularioImagem.formularioImagemImageview.load(url, imageLoader)
+            }
+
+            AlertDialog.Builder(this)
+                .setView(bindingFormularioImagem.root)
+                .setPositiveButton("Confirmar") { _, _ ->
+                    url = bindingFormularioImagem.formularioImagemUrl.text.toString()
+                    binding.activityFormularioProdutoImagem.load(url, imageLoader)
+                }
+                .setNegativeButton("Cancelar") { _, _ -> }
                 .show()
         }
     }
@@ -55,6 +81,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         }
 
         return Produto(
+            imagem = url,
             nome = nome,
             descricao = descricao,
             valor = valor
