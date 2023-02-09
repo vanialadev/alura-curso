@@ -26,7 +26,6 @@ class ListaProdutosAdapter(
             descricao.text = produto.descricao
             valor.text = produto.valor.toPlainString()
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,5 +51,4 @@ class ListaProdutosAdapter(
         this.produtos.addAll(produtos)
         notifyDataSetChanged()
     }
-
 }

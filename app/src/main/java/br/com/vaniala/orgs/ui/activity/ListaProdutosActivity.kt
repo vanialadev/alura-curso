@@ -17,8 +17,6 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     private val dao = ProdutoDao()
     private val adapter = ListaProdutosAdapter(context = this, produtos = dao.buscaTodos())
-
-
     private val binding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)
     }
@@ -27,23 +25,26 @@ class ListaProdutosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraRecyclerView()
+        configuraFab()
     }
 
     override fun onResume() {
         super.onResume()
         adapter.atualiza(dao.buscaTodos())
-        configuraFab()
     }
 
     private fun configuraFab() {
         binding.activityListaProdutosFab.setOnClickListener {
-            val intent = Intent(this, FormularioProdutoActivity::class.java)
-            startActivity(intent)
+            vaiParaFormulario()
         }
+    }
+
+    private fun vaiParaFormulario() {
+        val intent = Intent(this, FormularioProdutoActivity::class.java)
+        startActivity(intent)
     }
 
     private fun configuraRecyclerView() {
         binding.activityListaProdutosRecyclerView.adapter = adapter
-        binding.activityListaProdutosRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 }
