@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.vaniala.orgs.databinding.ProdutoItemBinding
 import br.com.vaniala.orgs.model.Produto
+import java.math.BigDecimal
+import java.text.NumberFormat
+import java.util.*
 
 class ListaProdutosAdapter(
     private val context: Context,
@@ -15,7 +18,7 @@ class ListaProdutosAdapter(
 
     private val produtos = produtos.toMutableList()
 
-    class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root){
+    class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         private val nome = binding.produtoItemNome
         private val descricao = binding.produtoItemDescricao
@@ -24,7 +27,13 @@ class ListaProdutosAdapter(
         fun vincula(produto: Produto) {
             nome.text = produto.nome
             descricao.text = produto.descricao
-            valor.text = produto.valor.toPlainString()
+            val valorEmMoeda: String = formataValorEmReal(produto.valor)
+            valor.text = valorEmMoeda
+        }
+
+        private fun formataValorEmReal(valor: BigDecimal): String {
+            val formatador: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            return formatador.format(valor)
         }
     }
 
