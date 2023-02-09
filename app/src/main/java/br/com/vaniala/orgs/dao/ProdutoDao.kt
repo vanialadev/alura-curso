@@ -1,6 +1,7 @@
 package br.com.vaniala.orgs.dao
 
 import br.com.vaniala.orgs.model.Produto
+import java.math.BigDecimal
 
 /**
  * Created by Vânia Almeida (Github: @vanialadev)
@@ -18,6 +19,12 @@ class ProdutoDao {
     }
 
     companion object {
-        private val produtos = mutableListOf<Produto>()
+        private val produtos = mutableListOf<Produto>(
+            Produto(
+                nome = "Salada de frutas",
+                descricao = "Laranja, maçã, uva, manga",
+                valor = BigDecimal("19.83")
+            )
+        )
     }
 }
