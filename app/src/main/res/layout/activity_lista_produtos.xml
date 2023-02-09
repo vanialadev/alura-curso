@@ -9,23 +9,24 @@
         android:id="@+id/activity_lista_produtos_recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/produto_item"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        tools:listitem="@layout/produto_item" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/activity_lista_produtos_fab"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/activity_lista_produtos_extend_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:layout_margin="16dp"
+        android:clickable="true"
+        android:contentDescription="@string/botao_de_adicionar_produto"
         android:focusable="true"
+        android:text="@string/novo_produto"
+        app:icon="@drawable/ic_action_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_action_add"
-        android:contentDescription="@string/botao_de_adicionar_produto" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

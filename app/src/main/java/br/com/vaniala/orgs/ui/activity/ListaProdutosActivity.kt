@@ -34,7 +34,7 @@ class ListaProdutosActivity : AppCompatActivity() {
     }
 
     private fun configuraFab() {
-        binding.activityListaProdutosFab.setOnClickListener {
+        binding.activityListaProdutosExtendFab.setOnClickListener {
             vaiParaFormulario()
         }
     }
