@@ -42,7 +42,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         with(binding) {
             activityDetalhesProdutoImagem.tentaCarregarImagem(
                 produtoCarregado.imagem,
-                this@DetalhesProdutoActivity
+                this@DetalhesProdutoActivity,
             )
             activityDetalhesProdutoNome.text = produtoCarregado.nome
             activityDetalhesProdutoDescricao.text = produtoCarregado.descricao
@@ -50,5 +50,4 @@ class DetalhesProdutoActivity : AppCompatActivity() {
                 produtoCarregado.valor.formataParaMoedaBrasileira()
         }
     }
-
 }

@@ -3,8 +3,6 @@ package br.com.vaniala.orgs.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
-import br.com.vaniala.orgs.dao.ProdutoDao
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
@@ -15,9 +13,7 @@ import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
  *
  */
 class ListaProdutosActivity : AppCompatActivity() {
-
-    private val dao = ProdutoDao()
-    private val adapter = ListaProdutosAdapter(context = this, produtos = dao.buscaTodos())
+    private val adapter = ListaProdutosAdapter(context = this)
     private val binding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)
     }
@@ -27,16 +23,12 @@ class ListaProdutosActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
-
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "orgs.db",
-        ).allowMainThreadQueries().build()
     }
 
     override fun onResume() {
         super.onResume()
+        val db = AppDatabase.instancia(this)
+        val dao = db.produtoDao()
         adapter.atualiza(dao.buscaTodos())
     }
 

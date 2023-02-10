@@ -2,7 +2,7 @@ package br.com.vaniala.orgs.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import br.com.vaniala.orgs.dao.ProdutoDao
+import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
@@ -36,10 +36,11 @@ class FormularioProdutoActivity : AppCompatActivity() {
     }
 
     private fun configuraBotaoSalvar() {
-        val dao = ProdutoDao()
+        val db = AppDatabase.instancia(this)
+        val dao = db.produtoDao()
         binding.activityFormularioProdutoBotaoSalvar.setOnClickListener {
             val produto = criaProduto()
-            dao.adiciona(produto)
+            dao.salva(produto)
             finish()
         }
     }
@@ -58,7 +59,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
             imagem = url,
             nome = nome,
             descricao = descricao,
-            valor = valor
+            valor = valor,
         )
     }
 }
