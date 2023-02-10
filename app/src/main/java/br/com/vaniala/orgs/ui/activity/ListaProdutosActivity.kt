@@ -1,10 +1,11 @@
 package br.com.vaniala.orgs.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
 import br.com.vaniala.orgs.dao.ProdutoDao
+import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 
@@ -26,6 +27,12 @@ class ListaProdutosActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
+
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "orgs.db",
+        ).allowMainThreadQueries().build()
     }
 
     override fun onResume() {
@@ -49,7 +56,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         adapter.quandoClicaNoItem = {
             val intent = Intent(
                 this,
-                DetalhesProdutoActivity::class.java
+                DetalhesProdutoActivity::class.java,
             ).apply {
                 putExtra(CHAVE_PRODUTO, it)
             }

@@ -1,6 +1,8 @@
 package br.com.vaniala.orgs.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -9,10 +11,12 @@ import java.math.BigDecimal
  * on 19/10/22.
  *
  */
+@Entity
 @Parcelize
 data class Produto(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val imagem: String? = null,
     val nome: String,
     val descricao: String,
-    val valor: BigDecimal
-): Parcelable
+    val valor: BigDecimal,
+) : Parcelable

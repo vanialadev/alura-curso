@@ -24,22 +24,25 @@ class ProdutoDao {
                 imagem = "https://cdn.pixabay.com/animation/2022/10/11/09/05/09-05-26-529_512.gif",
                 nome = "Salada de frutas",
                 descricao = "Laranja, maçã, uva, manga",
-                valor = BigDecimal("19.83")
-            ),  Produto(
+                valor = BigDecimal("19.83"),
+            ),
+            Produto(
                 imagem = "https://i.pinimg.com/originals/b4/e2/f9/b4e2f9968b11e0413f5d9e55c1ed9132.gif",
                 nome = "Banana",
                 descricao = "banana sambista",
-                valor = BigDecimal("1000000000.99")
-            ),  Produto(
+                valor = BigDecimal("1000000000.99"),
+            ),
+            Produto(
                 nome = "Erro",
                 descricao = "xxxx xxxxxx",
-                valor = BigDecimal("55.99")
-            ), Produto(
-                imagem = "https://gifs.eco.br/wp-content/uploads/2021/09/gifs-animados-de-maca-16.gif",
+                valor = BigDecimal("55.99"),
+            ),
+            Produto(
                 nome = "Erro image",
                 descricao = "xxxx xxxxxx",
-                valor = BigDecimal("55.99")
-            )
+                valor = BigDecimal("55.99"),
+            ),
+
         )
     }
 }

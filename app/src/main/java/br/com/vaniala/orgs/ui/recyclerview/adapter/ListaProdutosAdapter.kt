@@ -10,14 +10,12 @@ import br.com.vaniala.orgs.databinding.ProdutoItemBinding
 import br.com.vaniala.orgs.extensions.formataParaMoedaBrasileira
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
-import java.math.BigDecimal
-import java.text.NumberFormat
 import java.util.*
 
 class ListaProdutosAdapter(
     private val context: Context,
     produtos: List<Produto>,
-    var quandoClicaNoItem: (produto: Produto) -> Unit = {}
+    var quandoClicaNoItem: (produto: Produto) -> Unit = {},
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
@@ -64,7 +62,7 @@ class ListaProdutosAdapter(
             .inflate(
                 LayoutInflater.from(context),
                 parent,
-                false
+                false,
             )
         return ViewHolder(binding)
     }
