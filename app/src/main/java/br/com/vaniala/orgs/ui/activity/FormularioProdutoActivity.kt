@@ -25,6 +25,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraBotaoSalvar()
+        title = "Cadastrar produto"
 
         binding.activityFormularioProdutoImagem.setOnClickListener {
             FormularioImagemDialog(this).mostra(url) { imagem ->
