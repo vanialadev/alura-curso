@@ -1,20 +1,12 @@
 package br.com.vaniala.orgs.ui.activity
 
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
-import br.com.vaniala.orgs.R
+import androidx.appcompat.app.AppCompatActivity
 import br.com.vaniala.orgs.dao.ProdutoDao
 import br.com.vaniala.orgs.databinding.ActivityFormularioProdutoBinding
-import br.com.vaniala.orgs.databinding.FormularioImagemBinding
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
 import br.com.vaniala.orgs.ui.dialog.FormularioImagemDialog
-import coil.ImageLoader
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.load
 import java.math.BigDecimal
 
 /**
@@ -35,7 +27,10 @@ class FormularioProdutoActivity : AppCompatActivity() {
         configuraBotaoSalvar()
 
         binding.activityFormularioProdutoImagem.setOnClickListener {
-            FormularioImagemDialog(this)
+            FormularioImagemDialog(this).mostra(url) { imagem ->
+                url = imagem
+                binding.activityFormularioProdutoImagem.tentaCarregarImagem(url, this)
+            }
         }
     }
 

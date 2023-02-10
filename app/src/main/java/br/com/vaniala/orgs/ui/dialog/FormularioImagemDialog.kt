@@ -13,22 +13,33 @@ import br.com.vaniala.orgs.extensions.tentaCarregarImagem
  */
 class FormularioImagemDialog(private val context: Context) {
 
-    fun invoke() {
-        val binding = FormularioImagemBinding.inflate(LayoutInflater.from(context))
+    fun mostra(
+        urlPadrao: String? = null,
+        quandoImagemCarregada: (imagem: String) -> Unit
+    ) {
+        FormularioImagemBinding
+            .inflate(LayoutInflater.from(context)).apply {
+                urlPadrao?.let {
+                    formularioImagemImageview.tentaCarregarImagem(it, context)
+                    formularioImagemUrl.setText(it)
+                }
 
-        binding.formularioImagemBotaoCarregar.setOnClickListener {
-            val url = binding.formularioImagemUrl.text.toString()
-            binding.formularioImagemImageview.tentaCarregarImagem(url, context)
-        }
+                formularioImagemBotaoCarregar.setOnClickListener {
+                    val url = formularioImagemUrl.text.toString()
+                    formularioImagemImageview.tentaCarregarImagem(url, context)
+                }
 
-        AlertDialog.Builder(context)
-            .setView(binding.root)
-            .setPositiveButton("Confirmar") { _, _ ->
-                val url = binding.formularioImagemUrl.text.toString()
-//                binding.activityFormularioProdutoImagem.tentaCarregarImagem(url, context)
+                AlertDialog.Builder(context)
+                    .setView(root)
+                    .setPositiveButton("Confirmar") { _, _ ->
+                        val url = formularioImagemUrl.text.toString()
+                        quandoImagemCarregada(url)
+                    }
+                    .setNegativeButton("Cancelar") { _, _ -> }
+                    .show()
             }
-            .setNegativeButton("Cancelar") { _, _ -> }
-            .show()
+
+
     }
 
 }
