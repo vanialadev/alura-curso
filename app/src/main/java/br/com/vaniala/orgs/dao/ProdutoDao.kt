@@ -30,7 +30,16 @@ class ProdutoDao {
                 nome = "Banana",
                 descricao = "banana sambista",
                 valor = BigDecimal("1000000000.99")
-            ),
+            ),  Produto(
+                nome = "Erro",
+                descricao = "xxxx xxxxxx",
+                valor = BigDecimal("55.99")
+            ), Produto(
+                imagem = "",
+                nome = "Erro image",
+                descricao = "xxxx xxxxxx",
+                valor = BigDecimal("55.99")
+            )
 
         )
     }
