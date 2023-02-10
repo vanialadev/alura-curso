@@ -35,12 +35,11 @@ class ProdutoDao {
                 descricao = "xxxx xxxxxx",
                 valor = BigDecimal("55.99")
             ), Produto(
-                imagem = "",
+                imagem = "https://gifs.eco.br/wp-content/uploads/2021/09/gifs-animados-de-maca-16.gif",
                 nome = "Erro image",
                 descricao = "xxxx xxxxxx",
                 valor = BigDecimal("55.99")
             )
-
         )
     }
 }

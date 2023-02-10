@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.vaniala.orgs.databinding.ProdutoItemBinding
+import br.com.vaniala.orgs.extensions.formataParaMoedaBrasileira
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
 import java.math.BigDecimal
@@ -15,22 +16,32 @@ import java.util.*
 
 class ListaProdutosAdapter(
     private val context: Context,
-    produtos: List<Produto>
+    produtos: List<Produto>,
+    var quandoClicaNoItem: (produto: Produto) -> Unit = {}
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
 
-    class ViewHolder(binding: ProdutoItemBinding) :
+    inner class ViewHolder(binding: ProdutoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private lateinit var produto: Produto
 
         private val imagem = binding.produtoItemImagem
         private val nome = binding.produtoItemNome
         private val descricao = binding.produtoItemDescricao
         private val valor = binding.produtoItemValor
 
-
+        init {
+            itemView.setOnClickListener {
+                if (::produto.isInitialized) {
+                    quandoClicaNoItem(produto)
+                }
+            }
+        }
 
         fun vincula(produto: Produto, context: Context) {
+            this.produto = produto
 
             val visibilidade = if (produto.imagem != null) {
                 View.VISIBLE
@@ -43,13 +54,8 @@ class ListaProdutosAdapter(
             imagem.tentaCarregarImagem(produto.imagem, context)
             nome.text = produto.nome
             descricao.text = produto.descricao
-            val valorEmMoeda: String = formataValorEmReal(produto.valor)
+            val valorEmMoeda: String = produto.valor.formataParaMoedaBrasileira()
             valor.text = valorEmMoeda
-        }
-
-        private fun formataValorEmReal(valor: BigDecimal): String {
-            val formatador: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-            return formatador.format(valor)
         }
     }
 
