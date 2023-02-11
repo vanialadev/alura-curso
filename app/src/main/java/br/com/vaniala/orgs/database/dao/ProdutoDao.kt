@@ -1,8 +1,6 @@
 package br.com.vaniala.orgs.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import br.com.vaniala.orgs.model.Produto
 import java.math.BigDecimal
 
@@ -19,6 +17,12 @@ interface ProdutoDao {
 
     @Insert
     fun salva(vararg produto: Produto)
+
+    @Delete
+    fun deleta(produto: Produto)
+
+    @Update
+    fun altera(produto: Produto)
 
     companion object {
         private val produtos = mutableListOf<Produto>(

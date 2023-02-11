@@ -1,5 +1,6 @@
 package br.com.vaniala.orgs.ui.activity
 
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.vaniala.orgs.database.AppDatabase
@@ -20,12 +21,14 @@ class FormularioProdutoActivity : AppCompatActivity() {
         ActivityFormularioProdutoBinding.inflate(layoutInflater)
     }
     private var url: String? = null
+    private var idProduto = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraBotaoSalvar()
         title = "Cadastrar produto"
+        tentaCarregarProduto()
 
         binding.activityFormularioProdutoImagem.setOnClickListener {
             FormularioImagemDialog(this).mostra(url) { imagem ->
@@ -35,12 +38,39 @@ class FormularioProdutoActivity : AppCompatActivity() {
         }
     }
 
+    private fun tentaCarregarProduto() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            intent.getParcelableExtra(CHAVE_PRODUTO, Produto::class.java)?.let { produtoCarregado ->
+                carregaDadosProdutos(produtoCarregado)
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra<Produto>(CHAVE_PRODUTO)?.let { produtoCarregado ->
+                carregaDadosProdutos(produtoCarregado)
+            }
+        }
+    }
+
+    private fun carregaDadosProdutos(produtoCarregado: Produto) {
+        title = "Alterar produto"
+        idProduto = produtoCarregado.id
+        url = produtoCarregado.imagem
+        binding.activityFormularioProdutoImagem.tentaCarregarImagem(produtoCarregado.imagem, this)
+        binding.activityFormularioProdutoNome.setText(produtoCarregado.nome)
+        binding.activityFormularioProdutoDescricao.setText(produtoCarregado.descricao)
+        binding.activityFormularioProdutoValor.setText(produtoCarregado.valor.toPlainString())
+    }
+
     private fun configuraBotaoSalvar() {
         val db = AppDatabase.instancia(this)
         val dao = db.produtoDao()
         binding.activityFormularioProdutoBotaoSalvar.setOnClickListener {
             val produto = criaProduto()
-            dao.salva(produto)
+            if (idProduto > 0) {
+                dao.altera(produto)
+            } else {
+                dao.salva(produto)
+            }
             finish()
         }
     }
@@ -56,6 +86,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         }
 
         return Produto(
+            id = idProduto,
             imagem = url,
             nome = nome,
             descricao = descricao,
