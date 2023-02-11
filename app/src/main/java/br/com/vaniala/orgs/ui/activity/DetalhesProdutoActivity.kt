@@ -20,9 +20,13 @@ import br.com.vaniala.orgs.model.Produto
  */
 class DetalhesProdutoActivity : AppCompatActivity() {
 
-    private lateinit var produto: Produto
+    private var produtoId: Long? = null
+    private var produto: Produto? = null
     private val binding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)
+    }
+    private val dao by lazy {
+        AppDatabase.instancia(this).produtoDao()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,26 +35,34 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         tentaCarregarProduto()
     }
 
+    override fun onResume() {
+        super.onResume()
+        produtoId?.let {
+            produto = dao.buscaPorId(it)
+        }
+        produto?.let {
+            preencheCampos(it)
+        } ?: finish()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_detalhes_produto, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (::produto.isInitialized) {
-            val db = AppDatabase.instancia(this)
-            val dao = db.produtoDao()
-            when (item.itemId) {
-                R.id.menu_detalhes_produto_editar -> {
-                    Intent(this, FormularioProdutoActivity::class.java).apply {
-                        putExtra(CHAVE_PRODUTO, produto)
-                        startActivity(this)
-                    }
+        when (item.itemId) {
+            R.id.menu_detalhes_produto_editar -> {
+                Intent(this, FormularioProdutoActivity::class.java).apply {
+                    putExtra(CHAVE_PRODUTO, produto)
+                    startActivity(this)
                 }
-                R.id.menu_detalhes_produto_remover -> {
-                    dao.deleta(produto)
-                    finish()
+            }
+            R.id.menu_detalhes_produto_remover -> {
+                produto?.let {
+                    dao.deleta(it)
                 }
+                finish()
             }
         }
 
@@ -61,13 +73,13 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= 33) {
             intent.getParcelableExtra(CHAVE_PRODUTO, Produto::class.java)?.let { produtoCarregado ->
                 produto = produtoCarregado
-                preencheCampos(produtoCarregado)
+                produtoId = produtoCarregado.id
             } ?: finish()
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra<Produto>(CHAVE_PRODUTO)?.let { produtoCarregado ->
                 produto = produtoCarregado
-                preencheCampos(produtoCarregado)
+                produtoId = produtoCarregado.id
             } ?: finish()
         }
     }
