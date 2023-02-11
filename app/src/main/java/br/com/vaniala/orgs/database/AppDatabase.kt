@@ -14,7 +14,7 @@ import br.com.vaniala.orgs.model.Produto
  * on 10/02/23.
  *
  */
-@Database(entities = [Produto::class], version = 1)
+@Database(entities = [Produto::class], version = 1, exportSchema = true)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao

@@ -24,8 +24,8 @@ interface ProdutoDao {
         private val produtos = mutableListOf<Produto>(
             Produto(
                 imagem = "https://cdn.pixabay.com/animation/2022/10/11/09/05/09-05-26-529_512.gif",
-                nome = "Salada de frutas",
-                descricao = "Laranja, maçã, uva, manga",
+                nome = "Abacate",
+                descricao = "Abacate gordinho",
                 valor = BigDecimal("19.83"),
             ),
             Produto(
