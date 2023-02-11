@@ -5,4 +5,4 @@ package br.com.vaniala.orgs.ui.activity
  * on 09/02/23.
  *
  */
-const val CHAVE_PRODUTO = "produto"
+const val CHAVE_PRODUTO_ID = "PRODUTO_ID"
