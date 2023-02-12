@@ -15,4 +15,11 @@
     <string name="valor_asc">Valor asc</string>
     <string name="sem_ordem">Sem ordem</string>
     <string name="ordenar">Ordenar</string>
+    <string name="usuario">Usuário</string>
+    <string name="orgs">Orgs</string>
+    <string name="senha">Senha</string>
+    <string name="cadastrar_usuario">cadastrar usuário</string>
+    <string name="entrar">Entrar</string>
+    <string name="nome">Nome</string>
+    <string name="cadastrar">Cadastrar</string>
 </resources>
