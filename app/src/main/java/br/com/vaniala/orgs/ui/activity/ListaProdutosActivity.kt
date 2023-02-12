@@ -11,14 +11,13 @@ import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
 import br.com.vaniala.orgs.model.Produto
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 
 /**
  * Created by Vânia Almeida (Github: @vanialadev)
  * on 19/10/22.
  *
  */
-const val TAG: String = "Lista de Produtos"
 
 class ListaProdutosActivity : AppCompatActivity() {
     private val adapter = ListaProdutosAdapter(context = this)
@@ -30,26 +29,31 @@ class ListaProdutosActivity : AppCompatActivity() {
         AppDatabase.instancia(this).produtoDao()
     }
 
-    private val job = Job()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
+//        val fluxoDeNumeros = flow {
+//            repeat(100) {
+//                emit(it)
+//                delay(1000)
+//            }
+//        }
+//
+//        lifecycleScope.launch {
+//            fluxoDeNumeros.collect {
+//                Log.i("oito", "onCreate: $it")
+//            }
+//        }
     }
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch() {
+        lifecycleScope.launch {
             val produtos = dao.buscaTodos()
             adapter.atualiza(produtos)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
