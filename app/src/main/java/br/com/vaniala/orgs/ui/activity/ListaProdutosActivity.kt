@@ -2,13 +2,16 @@ package br.com.vaniala.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -20,6 +23,7 @@ import kotlinx.coroutines.withContext
  *
  */
 const val TAG: String = "Lista de Produtos"
+
 class ListaProdutosActivity : AppCompatActivity() {
     private val adapter = ListaProdutosAdapter(context = this)
     private val binding by lazy {
@@ -40,7 +44,15 @@ class ListaProdutosActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val scope = MainScope()
-        scope.launch {
+        val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
+            Log.i(TAG, "onResume: throwable $throwable")
+            Toast.makeText(this@ListaProdutosActivity, "erro", Toast.LENGTH_SHORT).show()
+        }
+        scope.launch(handler) {
+            MainScope().launch(handler) {
+                throw Exception("lançando exception na coroutine em outro scope")
+            }
+            throw IllegalArgumentException("lançando exception na coroutine")
             val produtos = withContext(Dispatchers.IO) {
                 dao.buscaTodos()
             }
