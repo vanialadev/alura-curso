@@ -2,14 +2,14 @@ package br.com.vaniala.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
+import br.com.vaniala.orgs.model.Produto
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import kotlinx.coroutines.*
 
@@ -41,25 +41,8 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val scope = MainScope()
-        val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
-            Log.i(TAG, "onResume: throwable $throwable")
-            Toast.makeText(this@ListaProdutosActivity, "erro", Toast.LENGTH_SHORT).show()
-        }
-        scope.launch(job + handler + Dispatchers.IO + CoroutineName("primaria")) {
-            repeat(1000) {
-                Log.i(TAG, "onResume: co esta em exc $it")
-                delay(1000)
-            }
-        }
-        scope.launch(handler) {
-            MainScope().launch(handler) {
-                throw Exception("lançando exception na coroutine em outro scope")
-            }
-            throw IllegalArgumentException("lançando exception na coroutine")
-            val produtos = withContext(Dispatchers.IO) {
-                dao.buscaTodos()
-            }
+        lifecycleScope.launch() {
+            val produtos = dao.buscaTodos()
             adapter.atualiza(produtos)
         }
     }
@@ -75,27 +58,33 @@ class ListaProdutosActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_lista_produtos_nome_desc -> {
-                adapter.atualiza(dao.buscaTodosOrdenadorPorNomeDesc())
+        lifecycleScope.launch {
+            val produtos: List<Produto>? = when (item.itemId) {
+                R.id.menu_lista_produtos_nome_desc -> {
+                    dao.buscaTodosOrdenadorPorNomeDesc()
+                }
+                R.id.menu_lista_produtos_nome_asc -> {
+                    dao.buscaTodosOrdenadorPorNomeAsc()
+                }
+                R.id.menu_lista_produtos_descricao_desc -> {
+                    dao.buscaTodosOrdenadorPorDescricaoDesc()
+                }
+                R.id.menu_lista_produtos_descricao_asc -> {
+                    dao.buscaTodosOrdenadorPorDescricaoAsc()
+                }
+                R.id.menu_lista_produtos_valor_desc -> {
+                    dao.buscaTodosOrdenadorPorValorDesc()
+                }
+                R.id.menu_lista_produtos_valor_asc -> {
+                    dao.buscaTodosOrdenadorPorValorAsc()
+                }
+                R.id.menu_lista_produtos_sem_ordem -> {
+                    dao.buscaTodos()
+                }
+                else -> null
             }
-            R.id.menu_lista_produtos_nome_asc -> {
-                adapter.atualiza(dao.buscaTodosOrdenadorPorNomeAsc())
-            }
-            R.id.menu_lista_produtos_descricao_desc -> {
-                adapter.atualiza(dao.buscaTodosOrdenadorPorDescricaoDesc())
-            }
-            R.id.menu_lista_produtos_descricao_asc -> {
-                adapter.atualiza(dao.buscaTodosOrdenadorPorDescricaoAsc())
-            }
-            R.id.menu_lista_produtos_valor_desc -> {
-                adapter.atualiza(dao.buscaTodosOrdenadorPorValorDesc())
-            }
-            R.id.menu_lista_produtos_valor_asc -> {
-                adapter.atualiza(dao.buscaTodosOrdenadorPorValorAsc())
-            }
-            R.id.menu_lista_produtos_sem_ordem -> {
-                adapter.atualiza(dao.buscaTodos())
+            produtos?.let {
+                adapter.atualiza(it)
             }
         }
 
