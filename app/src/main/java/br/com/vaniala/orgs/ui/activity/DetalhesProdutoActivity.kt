@@ -11,6 +11,11 @@ import br.com.vaniala.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.vaniala.orgs.extensions.formataParaMoedaBrasileira
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Created by Vânia Almeida (Github: @vanialadev)
@@ -28,6 +33,8 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         AppDatabase.instancia(this).produtoDao()
     }
 
+    private val scope = CoroutineScope(IO)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -40,10 +47,14 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     private fun buscaProduto() {
-        produto = dao.buscaPorId(produtoId)
-        produto?.let {
-            preencheCampos(it)
-        } ?: finish()
+        scope.launch {
+            produto = dao.buscaPorId(produtoId)
+            withContext(Main) {
+                produto?.let {
+                    preencheCampos(it)
+                } ?: finish()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -60,10 +71,12 @@ class DetalhesProdutoActivity : AppCompatActivity() {
                 }
             }
             R.id.menu_detalhes_produto_remover -> {
-                produto?.let {
-                    dao.deleta(it)
+                scope.launch {
+                    produto?.let {
+                        dao.deleta(it)
+                    }
+                    finish()
                 }
-                finish()
             }
         }
 

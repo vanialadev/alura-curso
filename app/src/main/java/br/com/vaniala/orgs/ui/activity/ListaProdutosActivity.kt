@@ -2,7 +2,6 @@ package br.com.vaniala.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -10,9 +9,10 @@ import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 /**
  * Created by Vânia Almeida (Github: @vanialadev)
@@ -32,17 +32,6 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runBlocking {
-            Log.i(TAG, "onCreate: runBlocking init")
-            repeat(100) {
-                launch {
-                    Log.e(TAG, "onCreate: launch init $it")
-                    delay(2000)
-                    Log.e(TAG, "onCreate: launch finish $it")
-                }
-            }
-            Log.i(TAG, "onCreate: runBlocking finish")
-        }
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
@@ -50,7 +39,13 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        adapter.atualiza(dao.buscaTodos())
+        val scope = MainScope()
+        scope.launch {
+            val produtos = withContext(Dispatchers.IO) {
+                dao.buscaTodos()
+            }
+            adapter.atualiza(produtos)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
