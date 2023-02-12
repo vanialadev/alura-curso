@@ -7,4 +7,12 @@
     <string name="imagem_do_produto">Imagem do produto</string>
     <string name="editar">Editar</string>
     <string name="remover">Remover</string>
+    <string name="nome_desc">Nome desc</string>
+    <string name="nome_asc">Nome asc</string>
+    <string name="descri_o_desc">Descrição desc</string>
+    <string name="descri_o_asc">Descrição asc</string>
+    <string name="valor_desc">Valor desc</string>
+    <string name="valor_asc">Valor asc</string>
+    <string name="sem_ordem">Sem ordem</string>
+    <string name="ordenar">Ordenar</string>
 </resources>
