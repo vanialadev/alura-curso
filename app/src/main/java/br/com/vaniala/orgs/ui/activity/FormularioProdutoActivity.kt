@@ -8,6 +8,7 @@ import br.com.vaniala.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
 import br.com.vaniala.orgs.ui.dialog.FormularioImagemDialog
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -52,9 +53,12 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
     private fun tentaBuscarProduto() {
         lifecycleScope.launch {
-            dao.buscaPorId(produtoId)?.let {
-                title = "Alterar produto"
-                carregaDadosProdutos(it)
+            val produto = dao.buscaPorId(produtoId)
+            title = "Alterar produto"
+            produto.collect {
+                it?.let {
+                    carregaDadosProdutos(it)
+                }
             }
         }
     }

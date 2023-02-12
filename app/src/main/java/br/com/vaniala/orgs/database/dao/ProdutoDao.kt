@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import br.com.vaniala.orgs.model.Produto
+import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 
 /**
@@ -17,25 +18,25 @@ import java.math.BigDecimal
 interface ProdutoDao {
 
     @Query("SELECT * FROM Produto")
-    suspend fun buscaTodos(): List<Produto>
+    fun buscaTodos(): Flow<List<Produto>>
 
     @Query("SELECT * FROM Produto ORDER BY nome DESC")
-    suspend fun buscaTodosOrdenadorPorNomeDesc(): List<Produto>
+    fun buscaTodosOrdenadorPorNomeDesc(): Flow<List<Produto>>
 
     @Query("SELECT * FROM Produto ORDER BY nome ASC")
-    suspend fun buscaTodosOrdenadorPorNomeAsc(): List<Produto>
+    fun buscaTodosOrdenadorPorNomeAsc(): Flow<List<Produto>>
 
     @Query("SELECT * FROM Produto ORDER BY descricao DESC")
-    suspend fun buscaTodosOrdenadorPorDescricaoDesc(): List<Produto>
+    fun buscaTodosOrdenadorPorDescricaoDesc(): Flow<List<Produto>>
 
     @Query("SELECT * FROM Produto ORDER BY descricao ASC")
-    suspend fun buscaTodosOrdenadorPorDescricaoAsc(): List<Produto>
+    fun buscaTodosOrdenadorPorDescricaoAsc(): Flow<List<Produto>>
 
     @Query("SELECT * FROM Produto ORDER BY valor DESC")
-    suspend fun buscaTodosOrdenadorPorValorDesc(): List<Produto>
+    fun buscaTodosOrdenadorPorValorDesc(): Flow<List<Produto>>
 
     @Query("SELECT * FROM Produto ORDER BY valor ASC")
-    suspend fun buscaTodosOrdenadorPorValorAsc(): List<Produto>
+    fun buscaTodosOrdenadorPorValorAsc(): Flow<List<Produto>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun salva(vararg produto: Produto)
@@ -44,7 +45,7 @@ interface ProdutoDao {
     suspend fun deleta(produto: Produto)
 
     @Query("SELECT * FROM Produto WHERE id = :id")
-    suspend fun buscaPorId(id: Long): Produto?
+    fun buscaPorId(id: Long): Flow<Produto?>
 
     companion object {
         private val produtos = mutableListOf<Produto>(

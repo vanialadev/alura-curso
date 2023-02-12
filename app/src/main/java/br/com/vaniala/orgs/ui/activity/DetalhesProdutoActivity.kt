@@ -12,6 +12,7 @@ import br.com.vaniala.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.vaniala.orgs.extensions.formataParaMoedaBrasileira
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -43,10 +44,13 @@ class DetalhesProdutoActivity : AppCompatActivity() {
 
     private fun buscaProduto() {
         lifecycleScope.launch {
-            produto = dao.buscaPorId(produtoId)
-            produto?.let {
-                preencheCampos(it)
-            } ?: finish()
+            val produtoFlow = dao.buscaPorId(produtoId)
+            produtoFlow.collect {
+                it?.let {
+                    produto = it
+                    preencheCampos(it)
+                } ?: finish()
+            }
         }
     }
 

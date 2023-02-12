@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
-import br.com.vaniala.orgs.model.Produto
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import kotlinx.coroutines.launch
 
@@ -34,26 +33,16 @@ class ListaProdutosActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
-//        val fluxoDeNumeros = flow {
-//            repeat(100) {
-//                emit(it)
-//                delay(1000)
-//            }
-//        }
-//
-//        lifecycleScope.launch {
-//            fluxoDeNumeros.collect {
-//                Log.i("oito", "onCreate: $it")
-//            }
-//        }
+        lifecycleScope.launch {
+            val produtos = dao.buscaTodos()
+            produtos.collect {
+                adapter.atualiza(it)
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch {
-            val produtos = dao.buscaTodos()
-            adapter.atualiza(produtos)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -63,7 +52,7 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         lifecycleScope.launch {
-            val produtos: List<Produto>? = when (item.itemId) {
+            when (item.itemId) {
                 R.id.menu_lista_produtos_nome_desc -> {
                     dao.buscaTodosOrdenadorPorNomeDesc()
                 }
@@ -86,8 +75,7 @@ class ListaProdutosActivity : AppCompatActivity() {
                     dao.buscaTodos()
                 }
                 else -> null
-            }
-            produtos?.let {
+            }?.collect {
                 adapter.atualiza(it)
             }
         }
