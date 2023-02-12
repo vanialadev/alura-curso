@@ -11,11 +11,7 @@ import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /**
  * Created by Vânia Almeida (Github: @vanialadev)
@@ -34,6 +30,8 @@ class ListaProdutosActivity : AppCompatActivity() {
         AppDatabase.instancia(this).produtoDao()
     }
 
+    private val job = Job()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -48,6 +46,12 @@ class ListaProdutosActivity : AppCompatActivity() {
             Log.i(TAG, "onResume: throwable $throwable")
             Toast.makeText(this@ListaProdutosActivity, "erro", Toast.LENGTH_SHORT).show()
         }
+        scope.launch(job + handler + Dispatchers.IO + CoroutineName("primaria")) {
+            repeat(1000) {
+                Log.i(TAG, "onResume: co esta em exc $it")
+                delay(1000)
+            }
+        }
         scope.launch(handler) {
             MainScope().launch(handler) {
                 throw Exception("lançando exception na coroutine em outro scope")
@@ -58,6 +62,11 @@ class ListaProdutosActivity : AppCompatActivity() {
             }
             adapter.atualiza(produtos)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
