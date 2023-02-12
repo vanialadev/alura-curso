@@ -3,9 +3,12 @@ package br.com.vaniala.orgs.ui.recyclerview.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.databinding.ProdutoItemBinding
 import br.com.vaniala.orgs.extensions.formataParaMoedaBrasileira
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
@@ -16,12 +19,14 @@ class ListaProdutosAdapter(
     private val context: Context,
     produtos: List<Produto> = emptyList(),
     var quandoClicaNoItem: (produto: Produto) -> Unit = {},
+    var quandoClicaEmEditar: (produto: Produto) -> Unit = {},
+    var quandoClicaEmRemover: (produto: Produto) -> Unit = {},
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
 
     inner class ViewHolder(binding: ProdutoItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), PopupMenu.OnMenuItemClickListener {
 
         private lateinit var produto: Produto
 
@@ -35,6 +40,16 @@ class ListaProdutosAdapter(
                 if (::produto.isInitialized) {
                     quandoClicaNoItem(produto)
                 }
+            }
+            itemView.setOnLongClickListener {
+                PopupMenu(context, itemView).apply {
+                    menuInflater.inflate(
+                        R.menu.menu_detalhes_produto,
+                        menu,
+                    )
+                    setOnMenuItemClickListener(this@ViewHolder)
+                }.show()
+                true
             }
         }
 
@@ -54,6 +69,20 @@ class ListaProdutosAdapter(
             descricao.text = produto.descricao
             val valorEmMoeda: String = produto.valor.formataParaMoedaBrasileira()
             valor.text = valorEmMoeda
+        }
+
+        override fun onMenuItemClick(item: MenuItem?): Boolean {
+            item?.let {
+                when (it.itemId) {
+                    R.id.menu_detalhes_produto_editar -> {
+                        quandoClicaEmEditar(produto)
+                    }
+                    R.id.menu_detalhes_produto_remover -> {
+                        quandoClicaEmRemover(produto)
+                    }
+                }
+            }
+            return true
         }
     }
 

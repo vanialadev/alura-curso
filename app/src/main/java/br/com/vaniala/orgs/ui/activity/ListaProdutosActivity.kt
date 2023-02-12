@@ -105,5 +105,20 @@ class ListaProdutosActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+        adapter.quandoClicaEmEditar = {
+            val intent = Intent(
+                this,
+                DetalhesProdutoActivity::class.java,
+            ).apply {
+                putExtra(CHAVE_PRODUTO_ID, it.id)
+            }
+            startActivity(intent)
+        }
+        adapter.quandoClicaEmRemover = {
+            lifecycleScope.launch {
+                dao.deleta(it)
+            }
+        }
     }
 }
