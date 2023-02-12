@@ -2,6 +2,7 @@ package br.com.vaniala.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +10,16 @@ import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * Created by Vânia Almeida (Github: @vanialadev)
  * on 19/10/22.
  *
  */
+const val TAG: String = "Lista de Produtos"
 class ListaProdutosActivity : AppCompatActivity() {
     private val adapter = ListaProdutosAdapter(context = this)
     private val binding by lazy {
@@ -27,6 +32,17 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        runBlocking {
+            Log.i(TAG, "onCreate: runBlocking init")
+            repeat(100) {
+                launch {
+                    Log.e(TAG, "onCreate: launch init $it")
+                    delay(2000)
+                    Log.e(TAG, "onCreate: launch finish $it")
+                }
+            }
+            Log.i(TAG, "onCreate: runBlocking finish")
+        }
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
