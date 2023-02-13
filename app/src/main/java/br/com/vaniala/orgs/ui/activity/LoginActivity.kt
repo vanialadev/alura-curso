@@ -1,12 +1,12 @@
 package br.com.vaniala.orgs.ui.activity
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityLoginBinding
+import br.com.vaniala.orgs.extensions.toast
 import br.com.vaniala.orgs.extensions.vaiPara
 import br.com.vaniala.orgs.preferences.dataStore
 import br.com.vaniala.orgs.preferences.usuarioLogadoPreferences
@@ -33,21 +33,20 @@ class LoginActivity : AppCompatActivity() {
         binding.activityLoginBotaoEntrar.setOnClickListener {
             val usuario = binding.activityLoginUsuario.text.toString()
             val senha = binding.activityLoginSenha.text.toString()
+            autentica(usuario, senha)
+        }
+    }
 
-            lifecycleScope.launch {
-                dao.autentica(usuario, senha).collect {
-                    it?.let {
-                        dataStore.edit { preferences ->
-                            preferences[usuarioLogadoPreferences] = it.id
-                        }
-                        vaiPara(ListaProdutosActivity::class.java)
-                        finish()
-                    } ?: Toast.makeText(
-                        this@LoginActivity,
-                        "Falha na autenticação",
-                        Toast.LENGTH_LONG,
-                    ).show()
-                }
+    private fun autentica(usuario: String, senha: String) {
+        lifecycleScope.launch {
+            dao.autentica(usuario, senha).collect {
+                it?.let {
+                    dataStore.edit { preferences ->
+                        preferences[usuarioLogadoPreferences] = it.id
+                    }
+                    vaiPara(ListaProdutosActivity::class.java)
+                    finish()
+                } ?: toast("Falha na autenticação")
             }
         }
     }

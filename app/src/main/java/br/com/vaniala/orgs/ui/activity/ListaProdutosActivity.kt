@@ -15,6 +15,7 @@ import br.com.vaniala.orgs.preferences.dataStore
 import br.com.vaniala.orgs.preferences.usuarioLogadoPreferences
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 /**
@@ -44,23 +45,34 @@ class ListaProdutosActivity : AppCompatActivity() {
         configuraFab()
         lifecycleScope.launch {
             launch {
-                val produtos = dao.buscaTodos()
-                produtos.collect {
-                    adapter.atualiza(it)
-                }
+                verificausuarioLogado()
             }
+        }
+    }
 
-            launch {
-                dataStore.data.collect { preferences ->
-                    launch {
-                        preferences[usuarioLogadoPreferences]?.let { usuarioId ->
-                            usuarioDao.buscaPorId(usuarioId).collect {
-                                title = it.nome
-                            }
-                        } ?: vaiParaLogin()
-                    }
+    private suspend fun verificausuarioLogado() {
+        dataStore.data.collect { preferences ->
+            preferences[usuarioLogadoPreferences]?.let { usuarioId ->
+                buscaUsuario(usuarioId)
+            } ?: vaiParaLogin()
+        }
+    }
+
+    private fun buscaUsuario(usuarioId: String) {
+        lifecycleScope.launch {
+            val usuarioEncontrado = usuarioDao.buscaPorId(usuarioId).firstOrNull()
+            usuarioEncontrado?.let {
+                launch {
+                    buscaProdutosUsuario()
                 }
             }
+        }
+    }
+
+    private suspend fun buscaProdutosUsuario() {
+        val produtos = dao.buscaTodos()
+        produtos.collect {
+            adapter.atualiza(it)
         }
     }
 
@@ -103,9 +115,7 @@ class ListaProdutosActivity : AppCompatActivity() {
                     dao.buscaTodos()
                 }
                 R.id.menu_lista_produtos_sair -> {
-                    dataStore.edit { preferences ->
-                        preferences.remove(usuarioLogadoPreferences)
-                    }
+                    deslogaUsuario()
                     null
                 }
                 else -> null
@@ -115,6 +125,12 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private suspend fun deslogaUsuario() {
+        dataStore.edit { preferences ->
+            preferences.remove(usuarioLogadoPreferences)
+        }
     }
 
     private fun configuraFab() {
