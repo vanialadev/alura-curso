@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
+import br.com.vaniala.orgs.extensions.vaiPara
 import br.com.vaniala.orgs.preferences.dataStore
 import br.com.vaniala.orgs.preferences.usuarioLogadoPreferences
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
@@ -48,14 +50,23 @@ class ListaProdutosActivity : AppCompatActivity() {
                 }
             }
 
-            dataStore.data.collect { preferences ->
-                preferences[usuarioLogadoPreferences]?.let { usuarioId ->
-                    usuarioDao.buscaPorId(usuarioId).collect {
-                        title = it.nome
+            launch {
+                dataStore.data.collect { preferences ->
+                    launch {
+                        preferences[usuarioLogadoPreferences]?.let { usuarioId ->
+                            usuarioDao.buscaPorId(usuarioId).collect {
+                                title = it.nome
+                            }
+                        } ?: vaiParaLogin()
                     }
                 }
             }
         }
+    }
+
+    private fun vaiParaLogin() {
+        vaiPara(LoginActivity::class.java)
+        finish()
     }
 
     override fun onResume() {
@@ -90,6 +101,12 @@ class ListaProdutosActivity : AppCompatActivity() {
                 }
                 R.id.menu_lista_produtos_sem_ordem -> {
                     dao.buscaTodos()
+                }
+                R.id.menu_lista_produtos_sair -> {
+                    dataStore.edit { preferences ->
+                        preferences.remove(usuarioLogadoPreferences)
+                    }
+                    null
                 }
                 else -> null
             }?.collect {
