@@ -7,17 +7,27 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.vaniala.orgs.database.converter.Converters
 import br.com.vaniala.orgs.database.dao.ProdutoDao
+import br.com.vaniala.orgs.database.dao.UsuarioDao
 import br.com.vaniala.orgs.model.Produto
+import br.com.vaniala.orgs.model.Usuario
 
 /**
  * Created by Vânia Almeida (Github: @vanialadev)
  * on 10/02/23.
  *
  */
-@Database(entities = [Produto::class], version = 1, exportSchema = true)
+@Database(
+    entities = [
+        Produto::class,
+        Usuario::class,
+    ],
+    version = 2,
+    exportSchema = true,
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
+    abstract fun usuarioDao(): UsuarioDao
 
     companion object {
 
@@ -30,9 +40,10 @@ abstract class AppDatabase : RoomDatabase() {
                 context,
                 AppDatabase::class.java,
                 "orgs.db",
-            ).build().also {
-                db = it
-            }
+            ).addMigrations(MIGRATION_1_2)
+                .build().also {
+                    db = it
+                }
         }
     }
 }
