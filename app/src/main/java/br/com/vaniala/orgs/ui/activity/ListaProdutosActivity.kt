@@ -9,7 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
+import br.com.vaniala.orgs.preferences.dataStore
+import br.com.vaniala.orgs.preferences.usuarioLogadoPreferences
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -45,8 +48,11 @@ class ListaProdutosActivity : AppCompatActivity() {
                 }
             }
 
-            intent.getStringExtra(CHAVE_USUARIO_ID)?.let { usuarioId ->
-                usuarioDao.buscaPorId(usuarioId).collect {
+            dataStore.data.collect { preferences ->
+                preferences[usuarioLogadoPreferences]?.let { usuarioId ->
+                    usuarioDao.buscaPorId(usuarioId).collect {
+                        title = it.nome
+                    }
                 }
             }
         }

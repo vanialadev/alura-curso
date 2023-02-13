@@ -3,10 +3,13 @@ package br.com.vaniala.orgs.ui.activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityLoginBinding
 import br.com.vaniala.orgs.extensions.vaiPara
+import br.com.vaniala.orgs.preferences.dataStore
+import br.com.vaniala.orgs.preferences.usuarioLogadoPreferences
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -34,9 +37,10 @@ class LoginActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 dao.autentica(usuario, senha).collect {
                     it?.let {
-                        vaiPara(ListaProdutosActivity::class.java) {
-                            putExtra(CHAVE_USUARIO_ID, it.id)
+                        dataStore.edit { preferences ->
+                            preferences[usuarioLogadoPreferences] = it.id
                         }
+                        vaiPara(ListaProdutosActivity::class.java)
                     } ?: Toast.makeText(
                         this@LoginActivity,
                         "Falha na autenticação",
