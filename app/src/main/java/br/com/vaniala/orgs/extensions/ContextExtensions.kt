@@ -8,9 +8,10 @@ import android.content.Intent
  * on 12/02/23.
  *
  */
-fun Context.vaiPara(clazz: Class<*>) {
+fun Context.vaiPara(clazz: Class<*>, intent: Intent.() -> Unit = {}) {
     Intent(this, clazz)
         .apply {
+            intent()
             startActivity(this)
         }
 }

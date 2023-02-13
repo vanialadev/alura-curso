@@ -16,7 +16,7 @@ class FormularioCadastroUsuarioActivity : AppCompatActivity() {
         ActivityFormularioCadastroUsuarioBinding.inflate(layoutInflater)
     }
 
-    private val daoUsuario by lazy {
+    private val usuarioDao by lazy {
         AppDatabase.instancia(this).usuarioDao()
     }
 
@@ -31,7 +31,7 @@ class FormularioCadastroUsuarioActivity : AppCompatActivity() {
             val novoUsuario = criaUsuario()
             lifecycleScope.launch {
                 try {
-                    daoUsuario.salva(novoUsuario)
+                    usuarioDao.salva(novoUsuario)
                     finish()
                 } catch (e: Exception) {
                     Log.e("Cadastro usuário", "configuraBotaoCadastrar: ", e)

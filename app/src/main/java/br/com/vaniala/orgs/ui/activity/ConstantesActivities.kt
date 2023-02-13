@@ -6,3 +6,4 @@ package br.com.vaniala.orgs.ui.activity
  *
  */
 const val CHAVE_PRODUTO_ID = "PRODUTO_ID"
+const val CHAVE_USUARIO_ID = "USUARIO_ID"

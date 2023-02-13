@@ -28,15 +28,26 @@ class ListaProdutosActivity : AppCompatActivity() {
         AppDatabase.instancia(this).produtoDao()
     }
 
+    private val usuarioDao by lazy {
+        AppDatabase.instancia(this).usuarioDao()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
         lifecycleScope.launch {
-            val produtos = dao.buscaTodos()
-            produtos.collect {
-                adapter.atualiza(it)
+            launch {
+                val produtos = dao.buscaTodos()
+                produtos.collect {
+                    adapter.atualiza(it)
+                }
+            }
+
+            intent.getStringExtra(CHAVE_USUARIO_ID)?.let { usuarioId ->
+                usuarioDao.buscaPorId(usuarioId).collect {
+                }
             }
         }
     }
