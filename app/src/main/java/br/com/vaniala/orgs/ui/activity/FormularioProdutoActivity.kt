@@ -1,7 +1,6 @@
 package br.com.vaniala.orgs.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityFormularioProdutoBinding
@@ -9,6 +8,7 @@ import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
 import br.com.vaniala.orgs.ui.dialog.FormularioImagemDialog
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -17,7 +17,7 @@ import java.math.BigDecimal
  * on 19/10/22.
  *
  */
-class FormularioProdutoActivity : AppCompatActivity() {
+class FormularioProdutoActivity : UsuarioBaseActivity() {
 
     private val binding by lazy {
         ActivityFormularioProdutoBinding.inflate(layoutInflater)
@@ -36,6 +36,12 @@ class FormularioProdutoActivity : AppCompatActivity() {
         configuraImageview()
         configuraBotaoSalvar()
         tentaCarregarProduto()
+        lifecycleScope.launch {
+            usuario
+                .filterNotNull()
+                .collect {
+                }
+        }
     }
 
     private fun configuraImageview() {
