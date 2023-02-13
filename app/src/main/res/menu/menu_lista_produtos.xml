@@ -41,4 +41,10 @@
         android:icon="@drawable/ic_action_perfil"
         android:title="@string/perfil_do_usu_rio"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_lista_produtos_todos_produtos"
+        android:icon="@drawable/ic_action_all"
+        android:title="@string/todos_os_produtos"
+        app:showAsAction="ifRoom" />
 </menu>

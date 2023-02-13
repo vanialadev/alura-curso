@@ -21,4 +21,7 @@ data class Produto(
     val descricao: String,
     val valor: BigDecimal,
     val usuarioId: String? = null,
-) : Parcelable
+) : Parcelable {
+    fun salvoSemUsuario() = usuarioId.isNullOrBlank() &&
+        id > 0L
+}

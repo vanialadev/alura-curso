@@ -91,6 +91,10 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
                     vaiPara(PerfilUsuarioActivity::class.java)
                     null
                 }
+                R.id.menu_lista_produtos_todos_produtos -> {
+                    vaiPara(TodosProdutosActivity::class.java)
+                    null
+                }
                 else -> null
             }?.collect {
                 adapter.atualiza(it)

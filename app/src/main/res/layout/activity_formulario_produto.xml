@@ -21,6 +21,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/imagem_padrao" />
 
+        <AutoCompleteTextView
+            android:id="@+id/activity_formulario_produto_usuario_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activity_formulario_produto_imagem"
+            tools:text="usuarioId"
+            tools:visibility="visible"
+            tools:ignore="LabelFor" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/formulario_produto_textinputlayout_nome"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -29,7 +42,7 @@
             android:layout_margin="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_formulario_produto_imagem">
+            app:layout_constraintTop_toBottomOf="@id/activity_formulario_produto_usuario_id">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activity_formulario_produto_nome"
