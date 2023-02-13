@@ -23,4 +23,6 @@
     <string name="nome">Nome</string>
     <string name="cadastrar">Cadastrar</string>
     <string name="sair">sair</string>
+    <string name="sair_do_app">Sair do App</string>
+    <string name="perfil_do_usu_rio">Perfil do usuário</string>
 </resources>

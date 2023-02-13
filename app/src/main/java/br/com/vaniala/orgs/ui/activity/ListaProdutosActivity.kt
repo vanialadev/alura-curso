@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import br.com.vaniala.orgs.R
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityListaProdutosBinding
+import br.com.vaniala.orgs.extensions.vaiPara
 import br.com.vaniala.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -84,8 +85,8 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
                 R.id.menu_lista_produtos_sem_ordem -> {
                     produtoDao.buscaTodos()
                 }
-                R.id.menu_lista_produtos_sair -> {
-                    deslogaUsuario()
+                R.id.menu_lista_produtos_perfil_usuario -> {
+                    vaiPara(PerfilUsuarioActivity::class.java)
                     null
                 }
                 else -> null

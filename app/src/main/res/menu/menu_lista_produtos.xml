@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/menu_lista_produtos_ordenar"
-        android:title="@string/ordenar"
         android:icon="@drawable/ic_action_ordenar"
+        android:title="@string/ordenar"
         app:showAsAction="ifRoom">
         <menu>
             <item
@@ -37,9 +37,8 @@
     </item>
 
     <item
-        android:id="@+id/menu_lista_produtos_sair"
-    android:title="@string/sair"
-    android:icon="@drawable/ic_action_sair"
-    app:showAsAction="ifRoom"
-        />
+        android:id="@+id/menu_lista_produtos_perfil_usuario"
+        android:icon="@drawable/ic_action_perfil"
+        android:title="@string/perfil_do_usu_rio"
+        app:showAsAction="ifRoom" />
 </menu>
