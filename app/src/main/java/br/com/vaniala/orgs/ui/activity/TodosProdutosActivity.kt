@@ -3,6 +3,7 @@ package br.com.vaniala.orgs.ui.activity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import br.com.vaniala.orgs.database.AppDatabase
 import br.com.vaniala.orgs.databinding.ActivityTodosProdutosBinding
 import br.com.vaniala.orgs.extensions.vaiPara
@@ -44,16 +45,20 @@ class TodosProdutosActivity : UsuarioBaseActivity() {
         }
     }
 
-    private fun criaAdapterDeProdutosComCabecalho(produtosUsuario: Map.Entry<String?, List<Produto>>) =
-        listOf(
-            CabecalhoAdapter(this, listOf(produtosUsuario.key)),
-            ListaProdutosAdapter(
-                this,
-                produtosUsuario.value,
-            ) { produtoClicado ->
-                vaiPara(DetalhesProdutoActivity::class.java) {
-                    putExtra(CHAVE_PRODUTO_ID, produtoClicado.id)
-                }
-            },
+    private fun criaAdapterDeProdutosComCabecalho(produtosUsuario: Map.Entry<String?, List<Produto?>?>):
+        List<RecyclerView.Adapter<out RecyclerView.ViewHolder>> {
+        val adapter = ListaProdutosAdapter(
+            this,
+            produtosUsuario.value,
         )
+        adapter.quandoClicaNoItem = { produtoClicado ->
+            vaiPara(DetalhesProdutoActivity::class.java) {
+                putExtra(CHAVE_PRODUTO_ID, produtoClicado.id)
+            }
+        }
+        return listOf(
+            CabecalhoAdapter(this, listOf(produtosUsuario.key)),
+            adapter,
+        )
+    }
 }

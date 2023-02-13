@@ -17,13 +17,13 @@ import java.util.*
 
 class ListaProdutosAdapter(
     private val context: Context,
-    produtos: List<Produto> = emptyList(),
+    produtos: List<Produto?>? = emptyList(),
     var quandoClicaNoItem: (produto: Produto) -> Unit = {},
     var quandoClicaEmEditar: (produto: Produto) -> Unit = {},
     var quandoClicaEmRemover: (produto: Produto) -> Unit = {},
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
-    private val produtos = produtos.toMutableList()
+    private val produtos = produtos?.toMutableList()
 
     inner class ViewHolder(binding: ProdutoItemBinding) :
         RecyclerView.ViewHolder(binding.root), PopupMenu.OnMenuItemClickListener {
@@ -97,16 +97,16 @@ class ListaProdutosAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val produto = produtos[position]
-        holder.vincula(produto, context)
+        val produto = produtos?.get(position)
+        produto?.let { holder.vincula(it, context) }
     }
 
-    override fun getItemCount() = produtos.size
+    override fun getItemCount() = produtos?.size ?: 0
 
     @SuppressLint("NotifyDataSetChanged")
     fun atualiza(produtos: List<Produto>) {
-        this.produtos.clear()
-        this.produtos.addAll(produtos)
+        this.produtos?.clear()
+        this.produtos?.addAll(produtos)
         notifyDataSetChanged()
     }
 }
