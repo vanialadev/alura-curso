@@ -39,14 +39,14 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
                 usuario
                     .filterNotNull()
                     .collect {
-                        buscaProdutosUsuario()
+                        buscaProdutosUsuario(it.id)
                     }
             }
         }
     }
 
-    private suspend fun buscaProdutosUsuario() {
-        val produtos = produtoDao.buscaTodos()
+    private suspend fun buscaProdutosUsuario(usuarioId: String) {
+        val produtos = produtoDao.buscaTodosDoUsuario(usuarioId)
         produtos.collect {
             adapter.atualiza(it)
         }
@@ -83,7 +83,9 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
                     produtoDao.buscaTodosOrdenadorPorValorAsc()
                 }
                 R.id.menu_lista_produtos_sem_ordem -> {
-                    produtoDao.buscaTodos()
+                    usuario.value?.let {
+                        produtoDao.buscaTodosDoUsuario(it.id)
+                    }
                 }
                 R.id.menu_lista_produtos_perfil_usuario -> {
                     vaiPara(PerfilUsuarioActivity::class.java)

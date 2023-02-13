@@ -7,7 +7,6 @@ import br.com.vaniala.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.vaniala.orgs.extensions.tentaCarregarImagem
 import br.com.vaniala.orgs.model.Produto
 import br.com.vaniala.orgs.ui.dialog.FormularioImagemDialog
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -84,18 +83,18 @@ class FormularioProdutoActivity : UsuarioBaseActivity() {
     }
 
     private fun configuraBotaoSalvar() {
-        val db = AppDatabase.instancia(this)
-        val dao = db.produtoDao()
         binding.activityFormularioProdutoBotaoSalvar.setOnClickListener {
-            val produto = criaProduto()
             lifecycleScope.launch {
-                dao.salva(produto)
-                finish()
+                usuario.value?.let {
+                    val produto = criaProduto(it.id)
+                    dao.salva(produto)
+                    finish()
+                }
             }
         }
     }
 
-    private fun criaProduto(): Produto {
+    private fun criaProduto(usuarioId: String): Produto {
         val nome = binding.activityFormularioProdutoNome.text.toString()
         val descricao = binding.activityFormularioProdutoDescricao.text.toString()
         val valorEmTexto = binding.activityFormularioProdutoValor.text.toString()
@@ -111,6 +110,7 @@ class FormularioProdutoActivity : UsuarioBaseActivity() {
             nome = nome,
             descricao = descricao,
             valor = valor,
+            usuarioId = usuarioId,
         )
     }
 }

@@ -21,7 +21,7 @@ import br.com.vaniala.orgs.model.Usuario
         Produto::class,
         Usuario::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
@@ -40,7 +40,10 @@ abstract class AppDatabase : RoomDatabase() {
                 context,
                 AppDatabase::class.java,
                 "orgs.db",
-            ).addMigrations(MIGRATION_1_2)
+            ).addMigrations(
+                MIGRATION_1_2,
+                MIGRATION_2_3,
+            )
                 .build().also {
                     db = it
                 }
