@@ -22,4 +22,5 @@
     <string name="entrar">Entrar</string>
     <string name="nome">Nome</string>
     <string name="cadastrar">Cadastrar</string>
+    <string name="sair">sair</string>
 </resources>

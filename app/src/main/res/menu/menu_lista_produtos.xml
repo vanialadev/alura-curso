@@ -35,4 +35,11 @@
                 android:title="@string/sem_ordem" />
         </menu>
     </item>
+
+    <item
+        android:id="@+id/menu_lista_produtos_sair"
+    android:title="@string/sair"
+    android:icon="@drawable/ic_action_sair"
+    app:showAsAction="ifRoom"
+        />
 </menu>
