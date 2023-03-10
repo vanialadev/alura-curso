@@ -34,14 +34,13 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
+
         lifecycleScope.launch {
-            launch {
-                usuario
-                    .filterNotNull()
-                    .collect {
-                        buscaProdutosUsuario(it.id)
-                    }
-            }
+            usuario
+                .filterNotNull()
+                .collect {
+                    buscaProdutosUsuario(it.id)
+                }
         }
     }
 
@@ -50,10 +49,6 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
         produtos.collect {
             adapter.atualiza(it)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

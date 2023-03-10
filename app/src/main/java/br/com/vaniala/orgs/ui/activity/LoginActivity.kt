@@ -28,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
         configuraBotaoCadastrar()
         configuraBotaoEntrar()
     }
-
     private fun configuraBotaoEntrar() {
         binding.activityLoginBotaoEntrar.setOnClickListener {
             val usuario = binding.activityLoginUsuario.text.toString()
